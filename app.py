@@ -1,6 +1,3 @@
-# Professional ATS Resume Screener + ATS CV Builder (Streamlit)
-
-```python
 import streamlit as st
 import PyPDF2
 import docx
@@ -18,58 +15,51 @@ st.set_page_config(
 )
 
 # =========================================================
-# CUSTOM CSS (Professional UI)
+# CUSTOM CSS
 # =========================================================
-st.markdown(
-    """
-    <style>
+st.markdown("""
+<style>
 
-    .main {
-        background-color: #0E1117;
-    }
+.stApp {
+    background: linear-gradient(to bottom right, #0f172a, #111827);
+    color: white;
+}
 
-    .stApp {
-        background: linear-gradient(to bottom right, #0E1117, #111827);
-        color: white;
-    }
+h1, h2, h3 {
+    color: white !important;
+}
 
-    h1, h2, h3 {
-        color: white !important;
-    }
+.big-card {
+    background-color: #1e293b;
+    padding: 25px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    border: 1px solid #334155;
+}
 
-    .big-card {
-        background-color: #1F2937;
-        padding: 25px;
-        border-radius: 15px;
-        margin-bottom: 20px;
-        border: 1px solid #374151;
-    }
+.skill-box {
+    background-color: #2563eb;
+    padding: 8px 14px;
+    border-radius: 10px;
+    display: inline-block;
+    margin: 5px;
+    color: white;
+    font-size: 14px;
+}
 
-    .skill-box {
-        background-color: #2563EB;
-        padding: 8px 14px;
-        border-radius: 10px;
-        display: inline-block;
-        margin: 5px;
-        color: white;
-        font-size: 14px;
-    }
+.score-box {
+    background-color: #111827;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #374151;
+    text-align: center;
+}
 
-    .score-box {
-        background-color: #111827;
-        padding: 20px;
-        border-radius: 12px;
-        border: 1px solid #374151;
-        text-align: center;
-    }
-
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+</style>
+""", unsafe_allow_html=True)
 
 # =========================================================
-# EXTRACT PDF TEXT
+# PDF TEXT EXTRACTION
 # =========================================================
 def extract_text_from_pdf(file):
 
@@ -78,6 +68,7 @@ def extract_text_from_pdf(file):
     pdf_reader = PyPDF2.PdfReader(file)
 
     for page in pdf_reader.pages:
+
         extracted = page.extract_text()
 
         if extracted:
@@ -86,7 +77,7 @@ def extract_text_from_pdf(file):
     return text
 
 # =========================================================
-# EXTRACT DOCX TEXT
+# DOCX TEXT EXTRACTION
 # =========================================================
 def extract_text_from_docx(file):
 
@@ -111,7 +102,7 @@ def clean_text(text):
     return text
 
 # =========================================================
-# MATCH SCORE
+# ATS MATCH SCORE
 # =========================================================
 def calculate_match(resume, jd):
 
@@ -124,42 +115,58 @@ def calculate_match(resume, jd):
     return round(similarity * 100, 2)
 
 # =========================================================
-# LARGE SKILLS DATABASE
+# SKILLS DATABASE
 # =========================================================
 skills_database = [
 
-    # Programming
-    "python", "java", "c++", "c", "javascript",
-    "typescript", "php", "ruby", "swift", "kotlin",
-
-    # Web Development
-    "html", "css", "react", "nextjs", "nodejs",
-    "express", "bootstrap", "tailwind",
-
-    # AI / ML
-    "machine learning", "deep learning", "tensorflow",
-    "pytorch", "nlp", "computer vision", "opencv",
-
-    # Data Science
-    "sql", "mysql", "postgresql", "mongodb",
-    "pandas", "numpy", "excel", "power bi",
+    "python",
+    "java",
+    "c++",
+    "c",
+    "javascript",
+    "typescript",
+    "php",
+    "react",
+    "nextjs",
+    "nodejs",
+    "express",
+    "html",
+    "css",
+    "bootstrap",
+    "tailwind",
+    "sql",
+    "mysql",
+    "postgresql",
+    "mongodb",
+    "machine learning",
+    "deep learning",
+    "tensorflow",
+    "pytorch",
+    "opencv",
+    "nlp",
+    "pandas",
+    "numpy",
+    "excel",
+    "power bi",
     "tableau",
-
-    # Cloud
-    "aws", "azure", "gcp", "docker",
-    "kubernetes", "firebase",
-
-    # Soft Skills
-    "communication", "leadership", "teamwork",
-    "problem solving", "critical thinking",
-
-    # Tools
-    "git", "github", "linux", "streamlit",
-    "figma", "canva"
+    "aws",
+    "azure",
+    "docker",
+    "kubernetes",
+    "firebase",
+    "git",
+    "github",
+    "linux",
+    "streamlit",
+    "figma",
+    "communication",
+    "leadership",
+    "teamwork",
+    "problem solving"
 ]
 
 # =========================================================
-# EXTRACT SKILLS
+# SKILL EXTRACTION
 # =========================================================
 def extract_skills(text):
 
@@ -169,7 +176,7 @@ def extract_skills(text):
 
     for skill in skills_database:
 
-        pattern = r"\\b" + re.escape(skill.lower()) + r"\\b"
+        pattern = r"\b" + re.escape(skill.lower()) + r"\b"
 
         if re.search(pattern, text):
             found_skills.append(skill)
@@ -204,7 +211,7 @@ def extract_phone(text):
     if match:
         return match.group(0)
 
-    return "Your Phone Number"
+    return "Your Phone"
 
 # =========================================================
 # EXTRACT NAME
@@ -229,20 +236,20 @@ def generate_summary(skills):
 
     if len(skills) == 0:
         return (
-            "Results-driven professional with strong technical skills "
-            "and excellent problem-solving abilities."
+            "Results-driven professional with strong "
+            "technical and communication skills."
         )
 
     top_skills = ", ".join(skills[:5])
 
     return (
-        f"Results-driven professional skilled in {top_skills}. "
-        f"Experienced in developing efficient solutions, "
+        f"Results-driven professional skilled in "
+        f"{top_skills}. Experienced in problem-solving, "
         f"team collaboration, and delivering high-quality projects."
     )
 
 # =========================================================
-# ATS PROFESSIONAL CV GENERATOR
+# PROFESSIONAL CV GENERATOR
 # =========================================================
 def generate_professional_cv(
     name,
@@ -265,45 +272,45 @@ def generate_professional_cv(
 Email: {email}
 Phone: {phone}
 
-============================================================
+==================================================
 PROFESSIONAL SUMMARY
-============================================================
+==================================================
 
 {summary}
 
-============================================================
+==================================================
 TECHNICAL SKILLS
-============================================================
+==================================================
 
 {skills_text}
 
-============================================================
+==================================================
 PROFESSIONAL EXPERIENCE
-============================================================
+==================================================
 
 {experience}
 
-============================================================
+==================================================
 EDUCATION
-============================================================
+==================================================
 
 {education}
 
-============================================================
+==================================================
 PROJECTS
-============================================================
+==================================================
 
 {projects}
 
-============================================================
+==================================================
 CERTIFICATIONS
-============================================================
+==================================================
 
 {certifications}
 
-============================================================
+==================================================
 LANGUAGES
-============================================================
+==================================================
 
 • English
 """
@@ -313,31 +320,34 @@ LANGUAGES
 # =========================================================
 # SUGGESTIONS
 # =========================================================
-def generate_suggestions(missing_skills, match):
+def generate_suggestions(
+    missing_skills,
+    match
+):
 
     suggestions = []
 
     if match < 50:
         suggestions.append(
-            "Improve alignment between resume and job description."
+            "Improve alignment with the job description."
         )
 
     if missing_skills:
         suggestions.append(
-            "Add these missing skills: "
+            "Add missing skills: "
             + ", ".join(missing_skills)
         )
 
     suggestions.append(
-        "Use measurable achievements with numbers and impact."
+        "Use measurable achievements with numbers."
     )
 
     suggestions.append(
-        "Add more technical projects and certifications."
+        "Add technical projects and certifications."
     )
 
     suggestions.append(
-        "Keep formatting simple and ATS-friendly."
+        "Use clean ATS-friendly formatting."
     )
 
     return suggestions
@@ -345,18 +355,15 @@ def generate_suggestions(missing_skills, match):
 # =========================================================
 # HERO SECTION
 # =========================================================
-st.markdown(
-    """
-    <div class="big-card">
-        <h1>📄 Professional ATS Resume AI</h1>
-        <p>
-            Upload your resume, analyze ATS score, detect skills,
-            identify missing skills, and generate a professional ATS-friendly CV.
-        </p>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+st.markdown("""
+<div class="big-card">
+    <h1>📄 Professional ATS Resume AI</h1>
+    <p>
+        Analyze resumes, calculate ATS score,
+        detect skills, and generate professional ATS-friendly CVs.
+    </p>
+</div>
+""", unsafe_allow_html=True)
 
 # =========================================================
 # TABS
@@ -367,14 +374,12 @@ tab1, tab2 = st.tabs([
 ])
 
 # =========================================================
-# TAB 1 - RESUME ANALYZER
+# TAB 1
 # =========================================================
 with tab1:
 
-    st.subheader("📤 Upload Resume")
-
     uploaded_file = st.file_uploader(
-        "Upload PDF or DOCX Resume",
+        "Upload Resume",
         type=["pdf", "docx"]
     )
 
@@ -384,7 +389,7 @@ with tab1:
 
     if uploaded_file:
 
-        # Extract Text
+        # Extract Resume Text
         if uploaded_file.name.endswith(".pdf"):
             resume_text = extract_text_from_pdf(uploaded_file)
         else:
@@ -392,15 +397,15 @@ with tab1:
 
         cleaned_resume = clean_text(resume_text)
 
-        # Extract Data
+        # Extract Info
         name = extract_name(resume_text)
         email = extract_email(resume_text)
         phone = extract_phone(resume_text)
+
+        # Extract Skills
         resume_skills = extract_skills(cleaned_resume)
 
-        # ===============================
-        # PROFILE INFO
-        # ===============================
+        # Profile Info
         col1, col2, col3 = st.columns(3)
 
         with col1:
@@ -412,23 +417,22 @@ with tab1:
         with col3:
             st.info(f"📱 {phone}")
 
-        # ===============================
-        # SKILLS
-        # ===============================
+        # Skills
         st.subheader("💻 Skills Detected")
 
         if resume_skills:
+
             for skill in resume_skills:
+
                 st.markdown(
                     f'<span class="skill-box">{skill}</span>',
                     unsafe_allow_html=True
                 )
+
         else:
             st.error("No skills detected.")
 
-        # ===============================
-        # JOB DESCRIPTION ANALYSIS
-        # ===============================
+        # ATS Match
         if jd:
 
             cleaned_jd = clean_text(jd)
@@ -462,13 +466,15 @@ with tab1:
             st.subheader("❌ Missing Skills")
 
             if missing_skills:
+
                 for skill in missing_skills:
                     st.warning(skill)
+
             else:
                 st.success("No important skills missing.")
 
             # Suggestions
-            st.subheader("💡 Improvement Suggestions")
+            st.subheader("💡 Suggestions")
 
             suggestions = generate_suggestions(
                 missing_skills,
@@ -479,20 +485,24 @@ with tab1:
                 st.write("👉", suggestion)
 
 # =========================================================
-# TAB 2 - ATS CV BUILDER
+# TAB 2
 # =========================================================
 with tab2:
 
-    st.subheader("📄 Create Professional ATS-Friendly CV")
+    st.subheader("📄 Generate ATS-Friendly CV")
 
     col1, col2 = st.columns(2)
 
     with col1:
+
         cv_name = st.text_input("Full Name")
+
         cv_email = st.text_input("Email")
+
         cv_phone = st.text_input("Phone Number")
 
     with col2:
+
         skills_input = st.text_area(
             "Skills (comma separated)",
             height=120
@@ -518,7 +528,7 @@ with tab2:
         height=100
     )
 
-    if st.button("🚀 Generate Professional ATS CV"):
+    if st.button("🚀 Generate ATS CV"):
 
         skills = [
             s.strip()
@@ -560,50 +570,3 @@ st.divider()
 st.caption(
     "Built with Streamlit • Professional ATS Resume AI"
 )
-```
-
----
-
-# Install Requirements
-
-```bash
-pip install streamlit scikit-learn python-docx PyPDF2
-```
-
----
-
-# Run Application
-
-```bash
-streamlit run app.py
-```
-
----
-
-# New Professional Features Added
-
-✅ Professional Dark UI
-
-✅ Separate ATS CV Builder
-
-✅ Resume Analyzer Tab
-
-✅ Skill Detection
-
-✅ ATS Match Score
-
-✅ Missing Skills Detection
-
-✅ Resume Suggestions
-
-✅ Professional ATS CV Generator
-
-✅ Better Layout & Styling
-
-✅ Wide Screen Dashboard
-
-✅ Download CV Feature
-
-✅ Professional Sections
-
-✅ Better User Experience
