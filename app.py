@@ -15,26 +15,27 @@ st.set_page_config(
 )
 
 # =========================================================
-# CUSTOM CSS
+# LIGHT PROFESSIONAL UI
 # =========================================================
 st.markdown("""
 <style>
 
 .stApp {
-    background: linear-gradient(to bottom right, #0f172a, #111827);
-    color: white;
+    background-color: #f8fafc;
+    color: #111827;
 }
 
 h1, h2, h3 {
-    color: white !important;
+    color: #111827 !important;
 }
 
 .big-card {
-    background-color: #1e293b;
-    padding: 25px;
-    border-radius: 15px;
+    background: white;
+    padding: 30px;
+    border-radius: 18px;
     margin-bottom: 20px;
-    border: 1px solid #334155;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
 .skill-box {
@@ -45,14 +46,48 @@ h1, h2, h3 {
     margin: 5px;
     color: white;
     font-size: 14px;
+    font-weight: 500;
 }
 
 .score-box {
-    background-color: #111827;
-    padding: 20px;
-    border-radius: 12px;
-    border: 1px solid #374151;
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    border: 1px solid #dbeafe;
     text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+div[data-testid="stFileUploader"] {
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+}
+
+div[data-testid="stTextArea"] textarea {
+    background-color: white !important;
+    color: #111827 !important;
+    border-radius: 10px !important;
+}
+
+div[data-testid="stTextInput"] input {
+    background-color: white !important;
+    color: #111827 !important;
+    border-radius: 10px !important;
+}
+
+.stButton>button {
+    background-color: #2563eb;
+    color: white;
+    border-radius: 10px;
+    border: none;
+    padding: 10px 20px;
+    font-weight: 600;
+}
+
+.stButton>button:hover {
+    background-color: #1d4ed8;
 }
 
 </style>
@@ -374,7 +409,7 @@ tab1, tab2 = st.tabs([
 ])
 
 # =========================================================
-# TAB 1
+# TAB 1 - RESUME ANALYZER
 # =========================================================
 with tab1:
 
@@ -397,15 +432,15 @@ with tab1:
 
         cleaned_resume = clean_text(resume_text)
 
-        # Extract Info
+        # Extract Information
         name = extract_name(resume_text)
         email = extract_email(resume_text)
         phone = extract_phone(resume_text)
 
-        # Extract Skills
+        # Skills
         resume_skills = extract_skills(cleaned_resume)
 
-        # Profile Info
+        # PROFILE INFO
         col1, col2, col3 = st.columns(3)
 
         with col1:
@@ -432,7 +467,7 @@ with tab1:
         else:
             st.error("No skills detected.")
 
-        # ATS Match
+        # ATS SCORE
         if jd:
 
             cleaned_jd = clean_text(jd)
@@ -485,7 +520,7 @@ with tab1:
                 st.write("👉", suggestion)
 
 # =========================================================
-# TAB 2
+# TAB 2 - ATS CV BUILDER
 # =========================================================
 with tab2:
 
@@ -568,5 +603,5 @@ with tab2:
 st.divider()
 
 st.caption(
-    "Built with Streamlit • Professional ATS Resume AI"
+    "Built by Mubashir Hussain • Professional ATS Resume AI"
 )
